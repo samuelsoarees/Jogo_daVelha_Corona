@@ -3,13 +3,13 @@ local widget = require("widget")
 
 
 
-x1 = display.contentWidth * 0.33
+local x1 = display.contentWidth * 0.33
 
-x2 = display.contentWidth * 0.66
+local x2 = display.contentWidth * 0.66
 
-y1 = display.contentHeight * 0.33
+local y1 = display.contentHeight * 0.33
 
-y2 = display.contentHeight * 0.66
+local y2 = display.contentHeight * 0.66
 
 
 
@@ -43,7 +43,7 @@ linhaHorizontal2:setStrokeColor(0,1,0)
 
 end
 
-function realiza_jogada( linha,coluna )
+function realiza_jogada_interface( linha,coluna )
 	
 	local centroX = 0
 	local centroY = 0 
@@ -184,13 +184,11 @@ b33.coluna = 3
 
 end
 
-
-
-local function realizaJogadaInterface(event)
+local function eventos_botoes_target(event)
 		
 		if (event.phase == "began") then
 			
-			realiza_jogada(event.target.linha,event.target.coluna)
+			realiza_jogada_interface(event.target.linha,event.target.coluna)
 			
 			
 		end
@@ -198,27 +196,30 @@ local function realizaJogadaInterface(event)
 	end
 
 local function eventosBotoes()
-b11:addEventListener("touch",realizaJogadaInterface)
+b11:addEventListener("touch",eventos_botoes_target)
 
-b12:addEventListener("touch",realizaJogadaInterface)
+b12:addEventListener("touch",eventos_botoes_target)
 
-b13:addEventListener("touch",realizaJogadaInterface)
+b13:addEventListener("touch",eventos_botoes_target)
 
-b21:addEventListener("touch",realizaJogadaInterface)
+b21:addEventListener("touch",eventos_botoes_target)
 
-b22:addEventListener("touch",realizaJogadaInterface)
+b22:addEventListener("touch",eventos_botoes_target)
 
-b23:addEventListener("touch",realizaJogadaInterface)
+b23:addEventListener("touch",eventos_botoes_target)
 
-b31:addEventListener("touch",realizaJogadaInterface)
+b31:addEventListener("touch",eventos_botoes_target)
 
-b32:addEventListener("touch",realizaJogadaInterface)
+b32:addEventListener("touch",eventos_botoes_target)
 
-b33:addEventListener("touch",realizaJogadaInterface)
+b33:addEventListener("touch",eventos_botoes_target)
 
 end
 
+
+
 desenha_tabuleiro()
+
 criarButao()
 
 eventosBotoes()
