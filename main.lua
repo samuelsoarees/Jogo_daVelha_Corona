@@ -1,6 +1,13 @@
 
 local widget = require("widget")
 
+tabuleiro = {	
+	
+	{" "," "," "}, 
+	{" "," "," "}, 
+	{" "," "," "}
+	
+}
 
 
 local x1 = display.contentWidth * 0.33
