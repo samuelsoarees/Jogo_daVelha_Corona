@@ -10,41 +10,262 @@ tabuleiro = {
 }
 
 
+local contador = 1
+
 local x1 = display.contentWidth * 0.33
 
 local x2 = display.contentWidth * 0.66
+
+local y = display.contentHeight /5
 
 local y1 = display.contentHeight * 0.33
 
 local y2 = display.contentHeight * 0.66
 
+-- Funções da logica do jogo
 
 
+function tabuleiro:realizaJogada(linha,coluna,valor)
+tabuleiro[linha][coluna] = valor
+end
+
+
+
+function tabuleiro:validaRealizaJogada(linha,coluna,valor)
+	if(tabuleiro[linha][coluna]== "x" or tabuleiro[linha][coluna] == "o") then
+		return false
+	end
+	
+	return true
+end
+
+
+function tabuleiro:verificaQualVencedor()
+
+
+--[[Esse metodo verifica se há algum vencedor]]
+	
+	
+	
+	if tabuleiro[2][2] =="x" or tabuleiro[2][2] =="o" then
+	
+		--[[Verifica se a segunda linha na vertical é um .equals()]]
+		if tabuleiro[1][2] == tabuleiro[2][2] and tabuleiro[2][2] == tabuleiro[3][2] then
+	
+			return tabuleiro[1][2]
+	
+		end
+	
+		--[[Verifica se a segunda linha na horizontal é um .equals()]]
+	
+		if tabuleiro[2][1] == tabuleiro[2][2] and tabuleiro[2][2] == tabuleiro[2][3] then
+	
+			return tabuleiro[2][1]
+	
+		end
+	
+		--[[Verifica se a diagonal em formato de \ é um .equals()]]
+	
+		if tabuleiro[1][1] == tabuleiro[2][2] and tabuleiro[2][2] == tabuleiro[3][3] then
+	
+			return tabuleiro[1][1]
+		
+		end
+	
+		--[[Verifica se a diagonal em formato de / é um .equals()]]
+	
+		if tabuleiro[3][1] == tabuleiro[2][2] and tabuleiro[2][2] == tabuleiro[1][3] then 
+	
+			return tabuleiro[3][1]
+		
+		end
+	
+	end
+	
+	
+	if tabuleiro[1][1] == "x" or tabuleiro[1][1] == "o" then
+	--[[Verifica se a primeira linha na horizontal é um .equals()]]
+	
+		if tabuleiro[1][1] == tabuleiro[1][2] and tabuleiro[1][2] == tabuleiro[1][3] then
+	
+			return tabuleiro[1][1]
+	
+		end
+	
+	
+		--[[Verifica se a primeira linha na vertical é um .equals()]]
+		if tabuleiro[1][1] == tabuleiro[2][1] and tabuleiro[2][1] == tabuleiro[3][1] then
+		
+			return tabuleiro[1][1]
+	
+		end
+	end
+	
+	
+	
+	if tabuleiro[3][3] == "x" or tabuleiro[3][3] == "o" then
+	
+		--[[Verifica se a terceira linha na vertical é um .equals()]]
+		if tabuleiro[1][3] == tabuleiro[2][3] and tabuleiro[2][3] == tabuleiro[3][3] then
+	
+			return tabuleiro[1][3]
+	
+		end
+	
+		--[[Verifica se a terceira linha na horizontal é um .equals()]]
+		if tabuleiro[3][1] == tabuleiro[3][2] and tabuleiro[3][2] == tabuleiro[3][3] then
+	
+			return tabuleiro[3][1]
+	
+		end
+	end
+	
+	return ""
+	
+end
+
+function tabuleiro:vencedor()
+	
+	--[[Esse metodo verifica se há algum vencedor]]
+	
+	
+	
+	if tabuleiro[2][2] =="x" or tabuleiro[2][2] =="o" then
+	
+		--[[Verifica se a segunda linha na vertical é um .equals()]]
+		if tabuleiro[1][2] == tabuleiro[2][2] and tabuleiro[2][2] == tabuleiro[3][2] then
+	
+			return true
+	
+		end
+	
+		--[[Verifica se a segunda linha na horizontal é um .equals()]]
+	
+		if tabuleiro[2][1] == tabuleiro[2][2] and tabuleiro[2][2] == tabuleiro[2][3] then
+	
+			return true
+	
+		end
+	
+		--[[Verifica se a diagonal em formato de \ é um .equals()]]
+	
+		if tabuleiro[1][1] == tabuleiro[2][2] and tabuleiro[2][2] == tabuleiro[3][3] then
+	
+			return true
+		
+		end
+	
+		--[[Verifica se a diagonal em formato de / é um .equals()]]
+	
+		if tabuleiro[3][1] == tabuleiro[2][2] and tabuleiro[2][2] == tabuleiro[1][3] then 
+	
+			return true
+		
+		end
+	
+	end
+	
+	
+	if tabuleiro[1][1] == "x" or tabuleiro[1][1] == "o" then
+	--[[Verifica se a primeira linha na horizontal é um .equals()]]
+	
+		if tabuleiro[1][1] == tabuleiro[1][2] and tabuleiro[1][2] == tabuleiro[1][3] then
+	
+			return true
+	
+		end
+	
+	
+		--[[Verifica se a primeira linha na vertical é um .equals()]]
+		if tabuleiro[1][1] == tabuleiro[2][1] and tabuleiro[2][1] == tabuleiro[3][1] then
+		
+			return true
+	
+		end
+	end
+	
+	
+	
+	if tabuleiro[3][3] == "x" or tabuleiro[3][3] == "o" then
+	
+		--[[Verifica se a terceira linha na vertical é um .equals()]]
+		if tabuleiro[1][3] == tabuleiro[2][3] and tabuleiro[2][3] == tabuleiro[3][3] then
+	
+			return true
+	
+		end
+	
+		--[[Verifica se a terceira linha na horizontal é um .equals()]]
+		if tabuleiro[3][1] == tabuleiro[3][2] and tabuleiro[3][2] == tabuleiro[3][3] then
+	
+			return true
+	
+		end
+	end
+	
+	
+	return false
+	
+end
+
+function tabuleiro:empate()
+	local cont = 0 
+	
+	for i=1 , #tabuleiro , 1 do
+	
+		for	s = 1 , 3 , 1 do
+		
+		if tabuleiro[i][s] == "x"  or tabuleiro[i][s] == "o"  then
+		
+			cont = cont + 1 
+			
+		end
+		
+		
+		
+		end
+
+	end
+	
+	if(cont == 9) then
+	
+		return true
+	
+	else 
+	
+		return false
+	
+	end
+	
+end
+
+
+-- Funções de interface
 function desenha_tabuleiro()
 
 
 
 linhaAltura1 =  display.newLine(x1 ,0 ,x1 , display.contentHeight)
 
-linhaAltura1.strokeWidth = 5
+linhaAltura1.strokeWidth = 2
 
 linhaAltura1:setStrokeColor(0,1,0)
 
 linhaAltura2 = display.newLine(x2 ,0 ,x2 , display.contentHeight)
 
-linhaAltura2.strokeWidth = 5
+linhaAltura2.strokeWidth = 2
 
 linhaAltura2:setStrokeColor(0,1,0)
 
 linhaHorizontal1 = display.newLine(0 , y1, display.contentWidth ,y1 )
 
-linhaHorizontal1.strokeWidth = 5
+linhaHorizontal1.strokeWidth = 2
 
 linhaHorizontal1:setStrokeColor(0,1,0)
 
 linhaHorizontal2 = display.newLine(0 , y2, display.contentWidth ,y2 )
 
-linhaHorizontal2.strokeWidth = 5	
+linhaHorizontal2.strokeWidth = 2
 
 linhaHorizontal2:setStrokeColor(0,1,0)
 
@@ -112,8 +333,20 @@ function realiza_jogada_interface( linha,coluna )
 
 	end
 	
+	if(tabuleiro:validaRealizaJogada(linha,coluna)) then
+			valor = ""
+			if contador % 2 == 0 then
+				desenhaX(centroX,centroY)
+				tabuleiro:realizaJogada(linha,coluna,"x")
+				
+			else
+				tabuleiro:realizaJogada(linha,coluna,"o")
+				desenhaCirculo(centroX,centroY)
 	
-	desenhaX(centroX,centroY)
+			end
+		
+		contador = contador+1
+	end
 	
 	
 end
@@ -225,11 +458,14 @@ end
 
 
 
+
 desenha_tabuleiro()
 
 criarButao()
 
 eventosBotoes()
+
+
 
 
 
