@@ -10,17 +10,25 @@ tabuleiro = {
 }
 
 
+
+
 local contador = 1
 
 local x1 = display.contentWidth * 0.33
 
 local x2 = display.contentWidth * 0.66
 
-local y = display.contentHeight /5
+local y1= display.contentHeight /5
 
-local y1 = display.contentHeight * 0.33
+local y2 = y1*2
 
-local y2 = display.contentHeight * 0.66
+local y3 = y1* 3
+
+local y4 = y1*4
+
+local y5 = y1*5
+
+local texto = display.newText({text = "",x = display.contentWidth/2,y =(y1+y2)/2,fontSize = 25})
 
 -- Funções da logica do jogo
 
@@ -31,7 +39,7 @@ end
 
 
 
-function tabuleiro:validaRealizaJogada(linha,coluna,valor)
+function tabuleiro:validaJogada(linha,coluna)
 	if(tabuleiro[linha][coluna]== "x" or tabuleiro[linha][coluna] == "o") then
 		return false
 	end
@@ -245,25 +253,27 @@ function desenha_tabuleiro()
 
 
 
-linhaAltura1 =  display.newLine(x1 ,0 ,x1 , display.contentHeight)
+linhaHorizontal1 = display.newLine(0 , (y2+y3)/3, display.contentWidth ,(y2+y3)/3 )
+
+linhaAltura1 =  display.newLine(x1 ,y2 ,x1 , display.contentHeight)
 
 linhaAltura1.strokeWidth = 2
 
 linhaAltura1:setStrokeColor(0,1,0)
 
-linhaAltura2 = display.newLine(x2 ,0 ,x2 , display.contentHeight)
+linhaAltura2 = display.newLine(x2 ,y2 ,x2 , display.contentHeight)
 
 linhaAltura2.strokeWidth = 2
 
 linhaAltura2:setStrokeColor(0,1,0)
 
-linhaHorizontal1 = display.newLine(0 , y1, display.contentWidth ,y1 )
+linhaHorizontal1 = display.newLine(0 , y3, display.contentWidth ,y3 )
 
 linhaHorizontal1.strokeWidth = 2
 
 linhaHorizontal1:setStrokeColor(0,1,0)
 
-linhaHorizontal2 = display.newLine(0 , y2, display.contentWidth ,y2 )
+linhaHorizontal2 = display.newLine(0 , y4, display.contentWidth ,y4 )
 
 linhaHorizontal2.strokeWidth = 2
 
@@ -279,67 +289,70 @@ function realiza_jogada_interface( linha,coluna )
 	if linha == 1 and coluna == 1 then
 
 		centroX = x1/2
-		centroY = y1/2
+		centroY = (y2+y3)/2
 
 	end
 
 	if linha == 1 and coluna == 2 then
 		
 		centroX = (x1+x2)/2
-		centroY = y1/2
+		centroY = (y2+y3)/2
 
 	end
 
 	if linha == 1 and coluna == 3 then
 		centroX = (x2+display.contentWidth)/2
-		centroY = y1/2
+		centroY = (y2+y3)/2
 
 	end
 
 	if linha == 2 and coluna == 1 then
 		centroX = x1/2
-		centroY = (y1+y2)/2
+		centroY = (y3+y4)/2
 
 	end
 
 	if linha == 2 and coluna == 2  then
 		centroX = (x1+x2)/2
-		centroY = (y1+y2)/2
+		centroY = (y3+y4)/2
 
 
 	end		
 
 	if linha == 2 and coluna == 3 then
 		centroX = (x2+display.contentWidth)/2
-		centroY = (y1+y2)/2
+		centroY = (y3+y4)/2
 
 	end
 
 
 	if linha == 3 and coluna == 1 then
 		centroX = x1/2
-		centroY = (y2 + display.contentHeight)/2
+		centroY = (y4 + display.contentHeight)/2
 
 	end
 
 	if linha == 3 and coluna == 2 then
 		centroX = (x1+x2)/2
-		centroY = (y2 + display.contentHeight)/2
+		centroY = (y4 + display.contentHeight)/2
 	end
 
 	if linha == 3 and coluna == 3 then
 		centroX = (x2 + display.contentWidth)/2
-		centroY = (y2 + display.contentHeight)/2
+		centroY = (y4 + display.contentHeight)/2
 
 	end
 	
-	if(tabuleiro:validaRealizaJogada(linha,coluna)) then
+	if(tabuleiro:validaJogada(linha,coluna)) then
 			valor = ""
+			
 			if contador % 2 == 0 then
+				texto.text = "Vez do Jogador O"
 				desenhaX(centroX,centroY)
 				tabuleiro:realizaJogada(linha,coluna,"x")
 				
 			else
+				texto.text = "Vez do Jogador X"
 				tabuleiro:realizaJogada(linha,coluna,"o")
 				desenhaCirculo(centroX,centroY)
 	
@@ -347,6 +360,39 @@ function realiza_jogada_interface( linha,coluna )
 		
 		contador = contador+1
 	end
+	
+	if tabuleiro:vencedor() then
+		texto.text = "O jogador ".. tabuleiro:verificaQualVencedor() .. " venceu o Jogo"
+		
+		for i=1 , 3 , 1 do
+
+			for s=1, 3, 1 do
+	
+		tabuleiro[i][s] = " "
+	
+				end
+	
+	
+			end
+		end
+		
+	
+	if tabuleiro:empate() then
+	texto.text = "Empate"
+	
+	for i=1 , 3 , 1 do
+
+			for s=1, 3, 1 do
+	
+		tabuleiro[i][s] = " "
+	
+				end
+	
+	
+			end
+	
+	end
+	
 	
 	
 end
@@ -379,46 +425,46 @@ end
 
 function criarButao()
 	
-b11 = widget.newButton({ x = x1/2, y = y1/2, width = (x1-5), height = (y1-5)})
+b11 = widget.newButton({ x = x1/2, y = (y2+y3)/2, width = (x1-2), height = (y1-2)})
 
 b11.linha = 1
 b11.coluna = 1
 
-b12 = widget.newButton({ x = (x1+x2)/2, y = (y1/2) , width = (x1-5), height = (y1-5) })
+b12 = widget.newButton({ x = (x1+x2)/2, y = (y2+y3)/2 , width = (x1-2), height = (y1-2) })
 b12.linha = 1
 b12.coluna = 2
 
 
-b13 = widget.newButton({ x = (x2 + display.contentWidth)/2, y = (y1/2) , width = (x1-5), height = (y1-5)})
+b13 = widget.newButton({ x = (x2 + display.contentWidth)/2, y = (y2+y3)/2 , width = (x1-2), height = (y1-2)})
 
 b13.linha = 1
 b13.coluna = 3
 
-b21 = widget.newButton({ x = (x1)/2, y = (y1+y2)/2 , width = (x1-5), height = (y1-5)})
+b21 = widget.newButton({ x = (x1)/2, y = (y3+y4)/2 , width = (x1-2), height = (y1-2)})
 
 b21.linha = 2
 b21.coluna = 1
 
-b22 = widget.newButton({ x = (x1+x2)/2, y = (y1+y2)/2 , width = (x1-5), height = (y1-5)})
+b22 = widget.newButton({ x = (x1+x2)/2, y = (y3+y4)/2 , width = (x1-2), height = (y1-2)})
 
 b22.linha = 2
 b22.coluna = 2
 
-b23 = widget.newButton({ x = (x2 + display.contentWidth)/2, y = (y1+y2)/2 , width = (x1-5), height = (y1-5)})
+b23 = widget.newButton({ x = (x2 + display.contentWidth)/2, y = (y3+y4)/2 , width = (x1-2), height = (y1-2)})
 
 b23.linha = 2
 b23.coluna = 3
 
-b31 = widget.newButton({ x = (x1)/2, y = (y2+display.contentHeight)/2 , width = (x1-5), height = (y1-5)})
+b31 = widget.newButton({ x = (x1)/2, y = (y4+display.contentHeight)/2 , width = (x1-2), height = (y1-2)})
 b31.linha = 3
 b31.coluna = 1
 
-b32 = widget.newButton({ x = (x1+x2)/2, y = (y2+display.contentHeight)/2 , width = (x1-5), height = (y1-5)})
+b32 = widget.newButton({ x = (x1+x2)/2, y = (y4+display.contentHeight)/2 , width = (x1-2), height = (y1-2)})
 b32.linha = 3
 b32.coluna = 2
 
 
-b33 = widget.newButton({ x = (x2+display.contentWidth)/2, y = (y2+display.contentHeight)/2 , width = (x1-5), height = (y1-5)})
+b33 = widget.newButton({ x = (x2+display.contentWidth)/2, y = (y4+display.contentHeight)/2 , width = (x1-2), height = (y1-2)})
 b33.linha = 3
 b33.coluna = 3
 
@@ -458,15 +504,10 @@ end
 
 
 
-
 desenha_tabuleiro()
-
 criarButao()
 
+
+
 eventosBotoes()
-
-
-
-
-
-
+texto.text= " Vez do Jogador O"
