@@ -10,6 +10,12 @@ tabuleiro = {
 }
 
 
+circulos = {}
+
+X = {}
+
+
+
 
 
 local contador = 1
@@ -344,7 +350,6 @@ function realiza_jogada_interface( linha,coluna )
 	end
 	
 	if(tabuleiro:validaJogada(linha,coluna)) then
-			valor = ""
 			
 			if contador % 2 == 0 then
 				texto.text = "Vez do Jogador O"
@@ -354,7 +359,8 @@ function realiza_jogada_interface( linha,coluna )
 			else
 				texto.text = "Vez do Jogador X"
 				tabuleiro:realizaJogada(linha,coluna,"o")
-				desenhaCirculo(centroX,centroY)
+				print(linha)
+				desenhaCirculo(centroX,centroY,linha,coluna)
 	
 			end
 		
@@ -364,19 +370,23 @@ function realiza_jogada_interface( linha,coluna )
 	
 	if tabuleiro:vencedor() then
 		texto.text = "O jogador ".. tabuleiro:verificaQualVencedor() .. " venceu o Jogo"
-		botao_reset()
+		botaum = botao_reset()
+		reset:addEventListener("touch",reseta_jogo)
+		
 		for i=1 , 3 , 1 do
 
 			for s=1, 3, 1 do
 	
-		tabuleiro[i][s] = " "
+				tabuleiro[i][s] = " "
 	
 				end
 	
 	
-			end
+	
 		end
-		
+			
+		end
+	
 	
 	if tabuleiro:empate() then
 	texto.text = "Empate"
@@ -400,7 +410,7 @@ function realiza_jogada_interface( linha,coluna )
 	
 end
 
-function desenhaCirculo(centroX,centroY)
+function desenhaCirculo(centroX,centroY,linha,coluna)
 	
 	circulo = display.newCircle(centroX,centroY,40)
 	
@@ -409,6 +419,9 @@ function desenhaCirculo(centroX,centroY)
 	circulo:setFillColor(0)
 
 	circulo:setStrokeColor(1,0,0)	
+	
+	
+	circulos.circulo = circulo
 end
 
 function desenhaX(centroX,centroY) 
@@ -488,10 +501,15 @@ local function eventos_botoes_target(event)
 local function reseta_jogo(event)	
 
 if event.phase == "began" then
-reset:addEventListener("touch",reseta_jogo)
 
+for i = 0 , #circulos, 1 do
 
-display.remove(circulo,linhaX1,linhaX2)
+if circulos[i].circulo ~= nil then
+				display.remove(circulos.circulo)
+			end
+
+end
+
 
 end
 
@@ -499,9 +517,9 @@ end
 	
 function botao_reset ()
 
-reset = widget.newButton({ x = display.contentWidth/2, y = display.contentHeight/2, width = display.contentWidth, height = display.contentHeight})
+reset = widget.newButton({ x = display.contentWidth/2, y = display.contentHeight/2, width = display.contentWidth, height = display.contentHeight,shape = "rect"})
 end
-	
+
 local function eventosBotoes()
 b11:addEventListener("touch",eventos_botoes_target)
 
@@ -522,8 +540,9 @@ b32:addEventListener("touch",eventos_botoes_target)
 b33:addEventListener("touch",eventos_botoes_target)
 
 
-end
 
+
+end
 
 function main()
 desenha_tabuleiro()
