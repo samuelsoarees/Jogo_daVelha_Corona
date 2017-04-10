@@ -9,10 +9,13 @@ tabuleiro = {
 	
 }
 
-
+c = 1
+xis = 1
 circulos = {}
 
-X = {}
+X1 = {}
+
+X2 = {}
 
 
 local reset = nil
@@ -43,8 +46,6 @@ function tabuleiro:realizaJogada(linha,coluna,valor)
 tabuleiro[linha][coluna] = valor
 end
 
-
-
 function tabuleiro:validaJogada(linha,coluna)
 	-- verifica se na tabela aquele lugar está vazio
 	
@@ -54,7 +55,6 @@ function tabuleiro:validaJogada(linha,coluna)
 	
 	return true
 end
-
 
 function tabuleiro:verificaQualVencedor()
 
@@ -257,7 +257,6 @@ function tabuleiro:empate()
 	
 end
 
-
 -- Funções de interface
 function desenha_tabuleiro()
 
@@ -290,6 +289,71 @@ linhaHorizontal2.strokeWidth = 2
 linhaHorizontal2:setStrokeColor(0,1,0)
 
 end
+
+function desenha_linha_Final(linha,coluna) 
+if linha == 1 and coluna == 1 then
+
+		centroX = x1/2
+		centroY = (y2+y3)/2
+
+	end
+
+	if linha == 1 and coluna == 2 then
+		
+		centroX = (x1+x2)/2
+		centroY = (y2+y3)/2
+
+	end
+
+	if linha == 1 and coluna == 3 then
+		centroX = (x2+display.contentWidth)/2
+		centroY = (y2+y3)/2
+
+	end
+
+	if linha == 2 and coluna == 1 then
+		centroX = x1/2
+		centroY = (y3+y4)/2
+
+	end
+
+	if linha == 2 and coluna == 2  then
+		centroX = (x1+x2)/2
+		centroY = (y3+y4)/2
+
+
+	end		
+
+	if linha == 2 and coluna == 3 then
+		centroX = (x2+display.contentWidth)/2
+		centroY = (y3+y4)/2
+
+	end
+
+
+	if linha == 3 and coluna == 1 then
+		centroX = x1/2
+		centroY = (y4 + display.contentHeight)/2
+
+	end
+
+	if linha == 3 and coluna == 2 then
+		centroX = (x1+x2)/2
+		centroY = (y4 + display.contentHeight)/2
+	end
+
+	if linha == 3 and coluna == 3 then
+		centroX = (x2 + display.contentWidth)/2
+		centroY = (y4 + display.contentHeight)/2
+
+	end
+
+
+return centroX,centroY
+
+
+end
+
 
 function realiza_jogada_interface( linha,coluna )
 	-- esse metodo realiza a jogada na interface, verifica se é valida a jogada, e verifica se há vencedor
@@ -373,11 +437,12 @@ function realiza_jogada_interface( linha,coluna )
 	end
 	
 	if tabuleiro:vencedor() then
-		texto.text = "O jogador ".. tabuleiro:verificaQualVencedor() .. " venceu o Jogo"
+		texto.text = "O jogador \"".. tabuleiro:verificaQualVencedor() .. "\" venceu o Jogo"
 		
 		
-		 reset = widget.newButton({ x = display.contentWidth/2, y = display.contentHeight/2, width =  display.contentWidth, height = display.contentHeight,shape = "rect"})
-		 reset:addEventListener("touch",reseta_jogo)
+		 reset = widget.newButton({ x = display.contentWidth/2, y = display.contentHeight/2, width =  display.contentWidth, height = display.contentHeight,
+		 onRelease = reseta_jogo})
+		
 		for i=1 , 3 , 1 do
 
 			for s=1, 3, 1 do
@@ -393,7 +458,8 @@ function realiza_jogada_interface( linha,coluna )
 	
 	if tabuleiro:empate() then
 	texto.text = "Empate"
-	
+	reset = widget.newButton({ x = display.contentWidth/2, y = display.contentHeight/2, width =  display.contentWidth, height = display.contentHeight,
+		 onRelease = reseta_jogo})
 	for i=1 , 3 , 1 do
 
 			for s=1, 3, 1 do
@@ -407,6 +473,7 @@ function realiza_jogada_interface( linha,coluna )
 end
 
 function desenhaCirculo(centroX,centroY,linha,coluna)
+	
 	-- essa funcao desenha o circulo
 	circulo = display.newCircle(centroX,centroY,40)
 	
@@ -417,7 +484,9 @@ function desenhaCirculo(centroX,centroY,linha,coluna)
 	circulo:setStrokeColor(1,0,0)	
 	
 	
-	circulos.circulo = circulo
+	circulos[c] = circulo
+	
+	c = c + 1
 end
 
 function desenhaX(centroX,centroY) 
@@ -433,6 +502,10 @@ function desenhaX(centroX,centroY)
 	 linhaX1:setStrokeColor(0,0,1)
 
 	 linhaX2:setStrokeColor(0,0,1)
+	 
+	 X1[xis] = linhaX1
+	 X2[xis] = linhaX2
+	 xis = xis + 1
 end
 
 function criarButao()
@@ -485,7 +558,7 @@ b33.coluna = 3
 
 end
 
-local function eventos_botoes_target(event)
+function eventos_botoes_target(event)
 		--  essa funcao é utilizada para realizar os eventos dos botoes
 		if (event.phase == "began") then
 			
@@ -496,26 +569,25 @@ local function eventos_botoes_target(event)
 
 	end
 
-local function reseta_jogo(event)	
+function reseta_jogo(event)	
 
-if event.phase == "began" then
+	for i = 1 , #circulos , 1 do
+		
+		display.remove(circulos[i])
+		
+	end
 
-for i = 0 , #circulos, 1 do
-
-if circulos[i].circulo ~= nil then
-				display.remove(circulos[i].circulo)
-			end
-
-end
-
-
-end
-
+	for i = 1 , #X1, 1 do
+		display.remove(X1[i])
+		display.remove(X2[i])
+	end
+	display.remove(reset)
+	contador = 1
+	texto.text= "   Bem Vindo ao Jogo da Velha! \n           Vez do Jogador O"
+	
 end
 	
-
-
-local function eventosBotoes()
+function eventosBotoes()
 -- Aqui é adicionado os eventos aos botoes
 
 b11:addEventListener("touch",eventos_botoes_target)
@@ -550,8 +622,6 @@ eventosBotoes()
 texto.text= "   Bem Vindo ao Jogo da Velha! \n           Vez do Jogador O"
 
 end
-
-
 
 
 main()
