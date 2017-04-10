@@ -15,7 +15,7 @@ circulos = {}
 X = {}
 
 
-
+local reset = nil
 
 
 local contador = 1
@@ -34,7 +34,7 @@ local y4 = y1*4
 
 local y5 = y1*5
 
-local texto = display.newText({text = "",x = display.contentWidth/2,y =(y1+y2)/2,fontSize = 25})
+local texto = display.newText({text = "",x = display.contentWidth/2,y =(y1+y2)/3,fontSize = 25})
 
 -- Funções da logica do jogo
 
@@ -46,6 +46,8 @@ end
 
 
 function tabuleiro:validaJogada(linha,coluna)
+	-- verifica se na tabela aquele lugar está vazio
+	
 	if(tabuleiro[linha][coluna]== "x" or tabuleiro[linha][coluna] == "o") then
 		return false
 	end
@@ -223,6 +225,8 @@ function tabuleiro:vencedor()
 end
 
 function tabuleiro:empate()
+	-- Esse metodo verifica se tem empate no jogo
+	
 	local cont = 0 
 	
 	for i=1 , #tabuleiro , 1 do
@@ -257,7 +261,7 @@ end
 -- Funções de interface
 function desenha_tabuleiro()
 
-
+-- Esse metodo desenha as linhas do tabuleiro e define a espessura da linha
 
 linhaHorizontal1 = display.newLine(0 , (y2+y3)/3, display.contentWidth ,(y2+y3)/3 )
 
@@ -288,7 +292,7 @@ linhaHorizontal2:setStrokeColor(0,1,0)
 end
 
 function realiza_jogada_interface( linha,coluna )
-	
+	-- esse metodo realiza a jogada na interface, verifica se é valida a jogada, e verifica se há vencedor
 	local centroX = 0
 	local centroY = 0 
 
@@ -359,8 +363,8 @@ function realiza_jogada_interface( linha,coluna )
 			else
 				texto.text = "Vez do Jogador X"
 				tabuleiro:realizaJogada(linha,coluna,"o")
-				print(linha)
 				desenhaCirculo(centroX,centroY,linha,coluna)
+				
 	
 			end
 		
@@ -370,19 +374,18 @@ function realiza_jogada_interface( linha,coluna )
 	
 	if tabuleiro:vencedor() then
 		texto.text = "O jogador ".. tabuleiro:verificaQualVencedor() .. " venceu o Jogo"
-		botaum = botao_reset()
-		reset:addEventListener("touch",reseta_jogo)
 		
+		
+		 reset = widget.newButton({ x = display.contentWidth/2, y = display.contentHeight/2, width =  display.contentWidth, height = display.contentHeight,shape = "rect"})
+		 reset:addEventListener("touch",reseta_jogo)
 		for i=1 , 3 , 1 do
 
 			for s=1, 3, 1 do
 	
 				tabuleiro[i][s] = " "
-	
+				
 				end
-	
-	
-	
+				
 		end
 			
 		end
@@ -391,27 +394,20 @@ function realiza_jogada_interface( linha,coluna )
 	if tabuleiro:empate() then
 	texto.text = "Empate"
 	
-	
-	
 	for i=1 , 3 , 1 do
 
 			for s=1, 3, 1 do
 	
-		tabuleiro[i][s] = " "
+				tabuleiro[i][s] = " "
 	
 				end
-	
-	
 			end
-	
 	end
-	
-	
 	
 end
 
 function desenhaCirculo(centroX,centroY,linha,coluna)
-	
+	-- essa funcao desenha o circulo
 	circulo = display.newCircle(centroX,centroY,40)
 	
 	circulo.strokeWidth = 5
@@ -425,7 +421,7 @@ function desenhaCirculo(centroX,centroY,linha,coluna)
 end
 
 function desenhaX(centroX,centroY) 
-	
+	--essa funcao desenha um X
 	 linhaX1 = display.newLine(centroX - 35, centroY - 35, centroX + 35 , centroY +35)
 
 	 linhaX2 = display.newLine(centroX + 35,centroY - 35, centroX - 35 , centroY + 35)
@@ -440,6 +436,8 @@ function desenhaX(centroX,centroY)
 end
 
 function criarButao()
+-- Cria todos os botoes menos o de reset, e atribui um valor de coluna e linha que servirão para se realizar uma jogada
+
 	
 b11 = widget.newButton({ x = x1/2, y = (y2+y3)/2, width = (x1-2), height = (y1-2)})
 
@@ -488,7 +486,7 @@ b33.coluna = 3
 end
 
 local function eventos_botoes_target(event)
-		
+		--  essa funcao é utilizada para realizar os eventos dos botoes
 		if (event.phase == "began") then
 			
 			realiza_jogada_interface(event.target.linha,event.target.coluna)
@@ -505,7 +503,7 @@ if event.phase == "began" then
 for i = 0 , #circulos, 1 do
 
 if circulos[i].circulo ~= nil then
-				display.remove(circulos.circulo)
+				display.remove(circulos[i].circulo)
 			end
 
 end
@@ -515,12 +513,11 @@ end
 
 end
 	
-function botao_reset ()
 
-reset = widget.newButton({ x = display.contentWidth/2, y = display.contentHeight/2, width = display.contentWidth, height = display.contentHeight,shape = "rect"})
-end
 
 local function eventosBotoes()
+-- Aqui é adicionado os eventos aos botoes
+
 b11:addEventListener("touch",eventos_botoes_target)
 
 b12:addEventListener("touch",eventos_botoes_target)
@@ -541,7 +538,6 @@ b33:addEventListener("touch",eventos_botoes_target)
 
 
 
-
 end
 
 function main()
@@ -551,7 +547,7 @@ criarButao()
 
 
 eventosBotoes()
-texto.text= " Vez do Jogador O"
+texto.text= "   Bem Vindo ao Jogo da Velha! \n           Vez do Jogador O"
 
 end
 
