@@ -32,7 +32,7 @@ local texto = display.newText({text = "",x = display.contentWidth/2,y =(y1+y2)/2
 
 -- Funções da logica do jogo
 
-
+-- Esse metodo realiza a jogada na tabela tabuleiro
 function tabuleiro:realizaJogada(linha,coluna,valor)
 tabuleiro[linha][coluna] = valor
 end
@@ -359,11 +359,12 @@ function realiza_jogada_interface( linha,coluna )
 			end
 		
 		contador = contador+1
+		
 	end
 	
 	if tabuleiro:vencedor() then
 		texto.text = "O jogador ".. tabuleiro:verificaQualVencedor() .. " venceu o Jogo"
-		
+		botao_reset()
 		for i=1 , 3 , 1 do
 
 			for s=1, 3, 1 do
@@ -379,6 +380,8 @@ function realiza_jogada_interface( linha,coluna )
 	
 	if tabuleiro:empate() then
 	texto.text = "Empate"
+	
+	
 	
 	for i=1 , 3 , 1 do
 
@@ -468,6 +471,7 @@ b33 = widget.newButton({ x = (x2+display.contentWidth)/2, y = (y4+display.conten
 b33.linha = 3
 b33.coluna = 3
 
+
 end
 
 local function eventos_botoes_target(event)
@@ -481,6 +485,23 @@ local function eventos_botoes_target(event)
 
 	end
 
+local function reseta_jogo(event)	
+
+if event.phase == "began" then
+reset:addEventListener("touch",reseta_jogo)
+
+
+display.remove(circulo,linhaX1,linhaX2)
+
+end
+
+end
+	
+function botao_reset ()
+
+reset = widget.newButton({ x = display.contentWidth/2, y = display.contentHeight/2, width = display.contentWidth, height = display.contentHeight})
+end
+	
 local function eventosBotoes()
 b11:addEventListener("touch",eventos_botoes_target)
 
@@ -500,10 +521,11 @@ b32:addEventListener("touch",eventos_botoes_target)
 
 b33:addEventListener("touch",eventos_botoes_target)
 
+
 end
 
 
-
+function main()
 desenha_tabuleiro()
 criarButao()
 
@@ -511,3 +533,10 @@ criarButao()
 
 eventosBotoes()
 texto.text= " Vez do Jogador O"
+
+end
+
+
+
+
+main()
