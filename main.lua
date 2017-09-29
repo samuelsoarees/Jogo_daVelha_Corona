@@ -1,7 +1,7 @@
 
 local widget = require("widget")
 
-tabuleiro = {	
+local tabuleiro = {	
 	
 	{" "," "," "}, 
 	{" "," "," "}, 
@@ -9,17 +9,15 @@ tabuleiro = {
 	
 }
 
-c = 1
-xis = 1
-circulos = {}
+local c = 1
+local xis = 1
+local circulos = {}
 
-X1 = {}
+local X1 = {}
 
-X2 = {}
-
+local X2 = {}
 
 local reset = nil
-
 
 local contador = 1
 
@@ -31,7 +29,7 @@ local y1= display.contentHeight /5
 
 local y2 = y1*2
 
-local y3 = y1* 3
+local y3 = y1*3
 
 local y4 = y1*4
 
@@ -43,7 +41,7 @@ local texto = display.newText({text = "",x = display.contentWidth/2,y =(y1+y2)/3
 
 -- Esse metodo realiza a jogada na tabela tabuleiro
 function tabuleiro:realizaJogada(linha,coluna,valor)
-tabuleiro[linha][coluna] = valor
+	tabuleiro[linha][coluna] = valor
 end
 
 function tabuleiro:validaJogada(linha,coluna)
@@ -59,9 +57,7 @@ end
 function tabuleiro:verificaQualVencedor()
 
 
---[[Esse metodo verifica se há algum vencedor]]
-	
-	
+	--[[Esse metodo verifica se há algum vencedor]]
 	
 	if tabuleiro[2][2] =="x" or tabuleiro[2][2] =="o" then
 	
@@ -118,7 +114,6 @@ function tabuleiro:verificaQualVencedor()
 	end
 	
 	
-	
 	if tabuleiro[3][3] == "x" or tabuleiro[3][3] == "o" then
 	
 		--[[Verifica se a terceira linha na vertical é um .equals()]]
@@ -137,13 +132,11 @@ function tabuleiro:verificaQualVencedor()
 	end
 	
 	return ""
-	
 end
 
 function tabuleiro:vencedor()
 	
 	--[[Esse metodo verifica se há algum vencedor]]
-	
 	
 	
 	if tabuleiro[2][2] =="x" or tabuleiro[2][2] =="o" then
@@ -201,7 +194,6 @@ function tabuleiro:vencedor()
 	end
 	
 	
-	
 	if tabuleiro[3][3] == "x" or tabuleiro[3][3] == "o" then
 	
 		--[[Verifica se a terceira linha na vertical é um .equals()]]
@@ -220,26 +212,22 @@ function tabuleiro:vencedor()
 	end
 	
 	
-	return false
-	
+	return false	
 end
 
 function tabuleiro:empate()
 	-- Esse metodo verifica se tem empate no jogo
-	
 	local cont = 0 
 	
 	for i=1 , #tabuleiro , 1 do
 	
 		for	s = 1 , 3 , 1 do
 		
-		if tabuleiro[i][s] == "x"  or tabuleiro[i][s] == "o"  then
+			if tabuleiro[i][s] == "x"  or tabuleiro[i][s] == "o"  then
 		
-			cont = cont + 1 
+				cont = cont + 1 
 			
-		end
-		
-		
+			end
 		
 		end
 
@@ -254,106 +242,42 @@ function tabuleiro:empate()
 		return false
 	
 	end
-	
 end
 
 -- Funções de interface
 function desenha_tabuleiro()
 
--- Esse metodo desenha as linhas do tabuleiro e define a espessura da linha
+	-- Esse metodo desenha as linhas do tabuleiro e define a espessura da linha
 
-linhaHorizontal1 = display.newLine(0 , (y2+y3)/3, display.contentWidth ,(y2+y3)/3 )
+	linhaHorizontal1 = display.newLine(0 , (y2+y3)/3, display.contentWidth ,(y2+y3)/3 )
 
-linhaAltura1 =  display.newLine(x1 ,y2 ,x1 , display.contentHeight)
+	linhaAltura1 =  display.newLine(x1 ,y2 ,x1 , display.contentHeight)
 
-linhaAltura1.strokeWidth = 2
+	linhaAltura1.strokeWidth = 2
 
-linhaAltura1:setStrokeColor(0,1,0)
+	linhaAltura1:setStrokeColor(0,1,0)
 
-linhaAltura2 = display.newLine(x2 ,y2 ,x2 , display.contentHeight)
+	linhaAltura2 = display.newLine(x2 ,y2 ,x2 , display.contentHeight)
 
-linhaAltura2.strokeWidth = 2
+	linhaAltura2.strokeWidth = 2
 
-linhaAltura2:setStrokeColor(0,1,0)
+	linhaAltura2:setStrokeColor(0,1,0)
 
-linhaHorizontal1 = display.newLine(0 , y3, display.contentWidth ,y3 )
+	linhaHorizontal1 = display.newLine(0 , y3, display.contentWidth ,y3 )
 
-linhaHorizontal1.strokeWidth = 2
+	linhaHorizontal1.strokeWidth = 2
 
-linhaHorizontal1:setStrokeColor(0,1,0)
+	linhaHorizontal1:setStrokeColor(0,1,0)
 
-linhaHorizontal2 = display.newLine(0 , y4, display.contentWidth ,y4 )
+	linhaHorizontal2 = display.newLine(0 , y4, display.contentWidth ,y4 )
 
-linhaHorizontal2.strokeWidth = 2
+	linhaHorizontal2.strokeWidth = 2
 
-linhaHorizontal2:setStrokeColor(0,1,0)
-
+	linhaHorizontal2:setStrokeColor(0,1,0)
 end
 
 function desenha_linha_Final(linha,coluna) 
-if linha == 1 and coluna == 1 then
-
-		centroX = x1/2
-		centroY = (y2+y3)/2
-
-	end
-
-	if linha == 1 and coluna == 2 then
-		
-		centroX = (x1+x2)/2
-		centroY = (y2+y3)/2
-
-	end
-
-	if linha == 1 and coluna == 3 then
-		centroX = (x2+display.contentWidth)/2
-		centroY = (y2+y3)/2
-
-	end
-
-	if linha == 2 and coluna == 1 then
-		centroX = x1/2
-		centroY = (y3+y4)/2
-
-	end
-
-	if linha == 2 and coluna == 2  then
-		centroX = (x1+x2)/2
-		centroY = (y3+y4)/2
-
-
-	end		
-
-	if linha == 2 and coluna == 3 then
-		centroX = (x2+display.contentWidth)/2
-		centroY = (y3+y4)/2
-
-	end
-
-
-	if linha == 3 and coluna == 1 then
-		centroX = x1/2
-		centroY = (y4 + display.contentHeight)/2
-
-	end
-
-	if linha == 3 and coluna == 2 then
-		centroX = (x1+x2)/2
-		centroY = (y4 + display.contentHeight)/2
-	end
-
-	if linha == 3 and coluna == 3 then
-		centroX = (x2 + display.contentWidth)/2
-		centroY = (y4 + display.contentHeight)/2
-
-	end
-
-
-return centroX,centroY
-
-
 end
-
 
 function realiza_jogada_interface( linha,coluna )
 	-- esse metodo realiza a jogada na interface, verifica se é valida a jogada, e verifica se há vencedor
@@ -361,23 +285,19 @@ function realiza_jogada_interface( linha,coluna )
 	local centroY = 0 
 
 	if linha == 1 and coluna == 1 then
-
 		centroX = x1/2
 		centroY = (y2+y3)/2
-
 	end
 
 	if linha == 1 and coluna == 2 then
 		
 		centroX = (x1+x2)/2
 		centroY = (y2+y3)/2
-
 	end
 
 	if linha == 1 and coluna == 3 then
 		centroX = (x2+display.contentWidth)/2
 		centroY = (y2+y3)/2
-
 	end
 
 	if linha == 2 and coluna == 1 then
@@ -389,21 +309,17 @@ function realiza_jogada_interface( linha,coluna )
 	if linha == 2 and coluna == 2  then
 		centroX = (x1+x2)/2
 		centroY = (y3+y4)/2
-
-
 	end		
 
 	if linha == 2 and coluna == 3 then
 		centroX = (x2+display.contentWidth)/2
 		centroY = (y3+y4)/2
-
 	end
 
 
 	if linha == 3 and coluna == 1 then
 		centroX = x1/2
 		centroY = (y4 + display.contentHeight)/2
-
 	end
 
 	if linha == 3 and coluna == 2 then
@@ -414,34 +330,29 @@ function realiza_jogada_interface( linha,coluna )
 	if linha == 3 and coluna == 3 then
 		centroX = (x2 + display.contentWidth)/2
 		centroY = (y4 + display.contentHeight)/2
-
 	end
 	
 	if(tabuleiro:validaJogada(linha,coluna)) then
 			
-			if contador % 2 == 0 then
-				texto.text = "Vez do Jogador O"
-				desenhaX(centroX,centroY)
-				tabuleiro:realizaJogada(linha,coluna,"x")
+		if contador % 2 == 0 then
+			texto.text = "Vez do Jogador O"
+			desenhaX(centroX,centroY)
+			tabuleiro:realizaJogada(linha,coluna,"x")
 				
-			else
-				texto.text = "Vez do Jogador X"
-				tabuleiro:realizaJogada(linha,coluna,"o")
-				desenhaCirculo(centroX,centroY,linha,coluna)
-				
-	
-			end
+		else
+			texto.text = "Vez do Jogador X"
+			tabuleiro:realizaJogada(linha,coluna,"o")
+			desenhaCirculo(centroX,centroY,linha,coluna)
+		end
 		
 		contador = contador+1
-		
 	end
 	
 	if tabuleiro:vencedor() then
 		texto.text = "O jogador \"".. tabuleiro:verificaQualVencedor() .. "\" venceu o Jogo"
 		
-		
-		 reset = widget.newButton({ x = display.contentWidth/2, y = display.contentHeight/2, width =  display.contentWidth, height = display.contentHeight,
-		 onRelease = reseta_jogo})
+		reset = widget.newButton({ x = display.contentWidth/2, y = display.contentHeight/2, width =  display.contentWidth, height = display.contentHeight,
+		onRelease = reseta_jogo})
 		
 		for i=1 , 3 , 1 do
 
@@ -449,27 +360,24 @@ function realiza_jogada_interface( linha,coluna )
 	
 				tabuleiro[i][s] = " "
 				
-				end
-				
-		end
-			
-		end
+			end	
+		end	
+	end
 	
 	
 	if tabuleiro:empate() then
-	texto.text = "Empate"
-	reset = widget.newButton({ x = display.contentWidth/2, y = display.contentHeight/2, width =  display.contentWidth, height = display.contentHeight,
-		 onRelease = reseta_jogo})
-	for i=1 , 3 , 1 do
+		texto.text = "Empate"
+		reset = widget.newButton({ x = display.contentWidth/2, y = display.contentHeight/2, width =  display.contentWidth, height = display.contentHeight,
+		 	onRelease = reseta_jogo})
+		for i=1 , 3 , 1 do
 
 			for s=1, 3, 1 do
 	
 				tabuleiro[i][s] = " "
 	
-				end
 			end
-	end
-	
+		end
+	end	
 end
 
 function desenhaCirculo(centroX,centroY,linha,coluna)
@@ -509,65 +417,59 @@ function desenhaX(centroX,centroY)
 end
 
 function criarButao()
--- Cria todos os botoes menos o de reset, e atribui um valor de coluna e linha que servirão para se realizar uma jogada
-
+	-- Cria todos os botoes menos o de reset, e atribui um valor de coluna e linha que servirão para se realizar uma jogada
 	
-b11 = widget.newButton({ x = x1/2, y = (y2+y3)/2, width = (x1-2), height = (y1-2)})
+	b11 = widget.newButton({ x = x1/2, y = (y2+y3)/2, width = (x1-2), height = (y1-2)})
+	b11.linha = 1
+	b11.coluna = 1
 
-b11.linha = 1
-b11.coluna = 1
-
-b12 = widget.newButton({ x = (x1+x2)/2, y = (y2+y3)/2 , width = (x1-2), height = (y1-2) })
-b12.linha = 1
-b12.coluna = 2
-
-
-b13 = widget.newButton({ x = (x2 + display.contentWidth)/2, y = (y2+y3)/2 , width = (x1-2), height = (y1-2)})
-
-b13.linha = 1
-b13.coluna = 3
-
-b21 = widget.newButton({ x = (x1)/2, y = (y3+y4)/2 , width = (x1-2), height = (y1-2)})
-
-b21.linha = 2
-b21.coluna = 1
-
-b22 = widget.newButton({ x = (x1+x2)/2, y = (y3+y4)/2 , width = (x1-2), height = (y1-2)})
-
-b22.linha = 2
-b22.coluna = 2
-
-b23 = widget.newButton({ x = (x2 + display.contentWidth)/2, y = (y3+y4)/2 , width = (x1-2), height = (y1-2)})
-
-b23.linha = 2
-b23.coluna = 3
-
-b31 = widget.newButton({ x = (x1)/2, y = (y4+display.contentHeight)/2 , width = (x1-2), height = (y1-2)})
-b31.linha = 3
-b31.coluna = 1
-
-b32 = widget.newButton({ x = (x1+x2)/2, y = (y4+display.contentHeight)/2 , width = (x1-2), height = (y1-2)})
-b32.linha = 3
-b32.coluna = 2
+	b12 = widget.newButton({ x = (x1+x2)/2, y = (y2+y3)/2 , width = (x1-2), height = (y1-2) })
+	b12.linha = 1
+	b12.coluna = 2
 
 
-b33 = widget.newButton({ x = (x2+display.contentWidth)/2, y = (y4+display.contentHeight)/2 , width = (x1-2), height = (y1-2)})
-b33.linha = 3
-b33.coluna = 3
+	b13 = widget.newButton({ x = (x2 + display.contentWidth)/2, y = (y2+y3)/2 , width = (x1-2), height = (y1-2)})
+
+	b13.linha = 1
+	b13.coluna = 3
+
+	b21 = widget.newButton({ x = (x1)/2, y = (y3+y4)/2 , width = (x1-2), height = (y1-2)})
+
+	b21.linha = 2
+	b21.coluna = 1
+
+	b22 = widget.newButton({ x = (x1+x2)/2, y = (y3+y4)/2 , width = (x1-2), height = (y1-2)})
+
+	b22.linha = 2
+	b22.coluna = 2
+
+	b23 = widget.newButton({ x = (x2 + display.contentWidth)/2, y = (y3+y4)/2 , width = (x1-2), height = (y1-2)})
+
+	b23.linha = 2
+	b23.coluna = 3
+
+	b31 = widget.newButton({ x = (x1)/2, y = (y4+display.contentHeight)/2 , width = (x1-2), height = (y1-2)})
+	b31.linha = 3
+	b31.coluna = 1
+
+	b32 = widget.newButton({ x = (x1+x2)/2, y = (y4+display.contentHeight)/2 , width = (x1-2), height = (y1-2)})
+	b32.linha = 3
+	b32.coluna = 2
 
 
+	b33 = widget.newButton({ x = (x2+display.contentWidth)/2, y = (y4+display.contentHeight)/2 , width = (x1-2), height = (y1-2)})
+	b33.linha = 3
+	b33.coluna = 3
 end
 
 function eventos_botoes_target(event)
-		--  essa funcao é utilizada para realizar os eventos dos botoes
-		if (event.phase == "began") then
+	--  essa funcao é utilizada para realizar os eventos dos botoes
+	if (event.phase == "began") then
 			
-			realiza_jogada_interface(event.target.linha,event.target.coluna)
-			
-			
-		end
-
+		realiza_jogada_interface(event.target.linha,event.target.coluna)
+				
 	end
+end
 
 function reseta_jogo(event)	
 
@@ -582,46 +484,41 @@ function reseta_jogo(event)
 		display.remove(X2[i])
 	end
 	display.remove(reset)
+	reset = nil
 	contador = 1
+	c=1
+	xis=1
 	texto.text= "   Bem Vindo ao Jogo da Velha! \n           Vez do Jogador O"
-	
 end
 	
 function eventosBotoes()
--- Aqui é adicionado os eventos aos botoes
+	-- Aqui é adicionado os eventos aos botoes
 
-b11:addEventListener("touch",eventos_botoes_target)
+	b11:addEventListener("touch",eventos_botoes_target)
 
-b12:addEventListener("touch",eventos_botoes_target)
+	b12:addEventListener("touch",eventos_botoes_target)
 
-b13:addEventListener("touch",eventos_botoes_target)
+	b13:addEventListener("touch",eventos_botoes_target)
 
-b21:addEventListener("touch",eventos_botoes_target)
+	b21:addEventListener("touch",eventos_botoes_target)
 
-b22:addEventListener("touch",eventos_botoes_target)
+	b22:addEventListener("touch",eventos_botoes_target)
 
-b23:addEventListener("touch",eventos_botoes_target)
+	b23:addEventListener("touch",eventos_botoes_target)
 
-b31:addEventListener("touch",eventos_botoes_target)
+	b31:addEventListener("touch",eventos_botoes_target)
 
-b32:addEventListener("touch",eventos_botoes_target)
+	b32:addEventListener("touch",eventos_botoes_target)
 
-b33:addEventListener("touch",eventos_botoes_target)
-
-
-
+	b33:addEventListener("touch",eventos_botoes_target)
 end
 
 function main()
-desenha_tabuleiro()
-criarButao()
+	desenha_tabuleiro()
+	criarButao()
 
-
-
-eventosBotoes()
-texto.text= "   Bem Vindo ao Jogo da Velha! \n           Vez do Jogador O"
-
+	eventosBotoes()
+	texto.text= "   Bem Vindo ao Jogo da Velha! \n           Vez do Jogador O"
 end
-
 
 main()
